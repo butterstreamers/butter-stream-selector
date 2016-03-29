@@ -1,0 +1,33 @@
+{
+  "name": "butter-stream-selector",
+  "version": "0.0.1",
+  "description": "Select between various butter-streamers the most apropriate one for a given url",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --reporter spec tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/butterstreamers/butter-stream-selector.git"
+  },
+  "keywords": [
+    "butter",
+    "streamer",
+    "selector"
+  ],
+  "author": "niv sardi <x@btn.sh>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/butterstreamers/butter-stream-selector/issues"
+  },
+  "homepage": "https://github.com/butterstreamers/butter-stream-selector#readme",
+  "dependencies": {
+    "debug": "^2.2.0",
+    "load-package-json": "0.0.1",
+    "lodash": "^4.6.1",
+    "urijs": "^1.17.1"
+  },
+  "devDependencies": {
+    "mocha": "^2.4.5"
+  }
+}
