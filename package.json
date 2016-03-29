@@ -28,6 +28,9 @@
     "urijs": "^1.17.1"
   },
   "devDependencies": {
+    "butter-streamer-http": "0.0.4",
+    "butter-streamer-torrent": "0.0.4",
+    "butter-streamer-youtube": "0.0.4",
     "mocha": "^2.4.5"
   }
 }
