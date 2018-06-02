@@ -1,75 +1,75 @@
-var loadPackageJSON = require('load-package-json')
-, debug = require('debug')('butter-stream-selector')
-, URI = require('urijs')
-, _ = require('lodash');
+const loadPackageJSON = require('load-package-json')
+const debug = require('debug')('butter-stream-selector')
+const URI = require('urijs')
+const  _ = require('lodash')
 
-function loadFromNPM(name) {
-    return require(name);
+function loadFromNPM (name) {
+    return require(name)
 }
 
-function loadFromPackageJSON(regex) {
-    var npm = loadPackageJSON();
+function loadFromPackageJSON (regex) {
+    var npm = loadPackageJSON()
 
     var packages = Object.keys(npm.dependencies).filter(function (p) {
-        return p.match(regex);
-    });
+        return p.match(regex)
+    })
 
     return packages.map(function (name) {
-        debug('loading npm', regex, name);
-        return loadFromNPM(name);
-    });
-}
-
-function loadStreamersFromPackageJSON () {
-    return loadFromPackageJSON(/butter-streamer-/);
-}
-
-function loadStreamers(streamerNames) {
-    return streamerNames.map(function (name) {
-        name = name.match(/^butter-streamer-/)?name:'butter-streamer-' + name;
-        return loadFromNPM(name);
+        debug('loading npm', regex, name)
+        return loadFromNPM(name)
     })
 }
 
-function spawnStreamer(o, url, args) {
-    debug ('returning', o.name, url, args)
-    return new o(url, args);
+function loadStreamersFromPackageJSON () {
+    return loadFromPackageJSON(/butter-streamer-/)
 }
 
-function pickStreamer(url, args) {
-    args = _.defaults(args, {
-        streamers: ['torrent', 'http', 'youtube'],
-    });
+function loadStreamers (streamerNames) {
+    return streamerNames.map(function (name) {
+        name = name.match(/^butter-streamer-/) ? name : 'butter-streamer-' + name
+        return loadFromNPM(name)
+    })
+}
 
-    var streamers =
+function spawnStreamer (o, url, args) {
+    debug('returning', o.name, url, args)
+    return new o(url, args)
+}
+
+function pickStreamer (url, passedArgs) {
+    const args = Object.assign({
+        streamers: ['torrent', 'http', 'youtube']
+    }, passedArgs)
+
+    const streamers =
         _.orderBy(loadStreamers(args.streamers)
-                  .concat(loadStreamersFromPackageJSON()), 'prototype.config.priority')
+            .concat(loadStreamersFromPackageJSON()), 'config.priority')
 
-    var uri = URI(url);
-    var fails = [];
+    const uri = URI(url)
+    const fails = []
 
-    for (var i = 0; i< streamers.length; i++) {
-        var s = streamers[i]
-        var c = s.prototype.config;
+    for (let i = 0; i < streamers.length; i++) {
+        const streamer = streamers[i]
+        const {config} = streamer
 
-        if (c.type && c.type === args.type) {
-            debug ('found streamer of type', s.type)
-            return spawnStreamer(s, url, args);
+        if (config.type && config.type === args.type) {
+            debug('found streamer of type', s.type)
+            return spawnStreamer(s, url, args)
         }
 
-        for (var k in c) {
-            if (uri[k] && uri[k]().match(c[k])) {
-                debug ('streamer matched', k, uri[k](), c[k])
-                debug ('tried', fails)
-                return spawnStreamer(s, url, args);
+        for (let configItem in config) {
+            if (uri[configItem] && uri[configItem]().match(config[configItem])) {
+                debug('streamer matched', configItem, uri[configItem](), config[configItem])
+                debug('tried', fails)
+                return spawnStreamer(streamer, url, args)
             }
         }
 
-        fails.push(c.type);
+        fails.push(config.type)
     }
 
-    debug ('returning nothing')
+    debug('returning nothing')
     return new Error("couldn't locate streamer")
 }
 
-module.exports = pickStreamer;
+module.exports = pickStreamer

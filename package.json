@@ -4,7 +4,8 @@
   "description": "Select between various butter-streamers the most apropriate one for a given url",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --reporter spec tests"
+    "test": "mocha --reporter spec tests",
+    "lint": "standard --env mocha"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
     "debug": "^2.2.0",
     "load-package-json": "0.0.1",
     "lodash": "^4.6.1",
+    "standard": "^11.0.1",
     "urijs": "^1.17.1"
   },
   "devDependencies": {
