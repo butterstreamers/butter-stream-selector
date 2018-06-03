@@ -31,9 +31,9 @@ function loadStreamers (streamerNames) {
     })
 }
 
-function spawnStreamer (o, url, args) {
-    debug('returning', o.name, url, args)
-    return new o(url, args)
+function spawnStreamer (Streamer, url, args) {
+    debug('returning', Streamer.name, url, args)
+    return new Streamer(url, args)
 }
 
 function pickStreamer (url, passedArgs) {
@@ -49,8 +49,8 @@ function pickStreamer (url, passedArgs) {
     const fails = []
 
     for (let i = 0; i < streamers.length; i++) {
-        const streamer = streamers[i]
-        const {config} = streamer
+        const Streamer = streamers[i]
+        const {config} = Streamer
 
         if (config.type && config.type === args.type) {
             debug('found streamer of type', s.type)
@@ -61,7 +61,7 @@ function pickStreamer (url, passedArgs) {
             if (uri[configItem] && uri[configItem]().match(config[configItem])) {
                 debug('streamer matched', configItem, uri[configItem](), config[configItem])
                 debug('tried', fails)
-                return spawnStreamer(streamer, url, args)
+                return spawnStreamer(Streamer, url, args)
             }
         }
 
