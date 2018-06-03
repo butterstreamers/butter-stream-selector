@@ -1,7 +1,5 @@
-var http = require('http')
 var assert = require('assert')
 var Selector = require('../')
-var fs = require('fs')
 var debug = require('debug')('butter-stream-selector:test')
 
 describe('Streaming Server', function () {
