@@ -58,12 +58,18 @@ function pickStreamer (url, passedArgs) {
       return spawnStreamer(Streamer, url, args)
     }
 
-    for (let configItem in config) {
-      if (uri[configItem] && uri[configItem]().match(config[configItem])) {
-        debug('streamer matched', configItem, uri[configItem](), config[configItem])
-        debug('tried', fails)
-        return spawnStreamer(Streamer, url, args)
+    for (let configKey in config) {
+      const configRegex = new RegExp(config[configKey])
+      if (uri[configKey]) {
+        const uriItem = uri[configKey]()
+
+        if (uriItem.match(configRegex)) {
+          debug('streamer matched', configKey, uriItem, configRegex)
+          debug('tried', fails)
+          return spawnStreamer(Streamer, url, args)
+        }
       }
+
     }
 
     fails.push(config.type)
