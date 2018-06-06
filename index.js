@@ -9,6 +9,7 @@ function loadFromNPM (name) {
 
 function loadFromPackageJSON (regex) {
   var npm = loadPackageJSON()
+  if (! npm) return []
 
   var packages = Object.keys(npm.dependencies).filter(function (p) {
     return p.match(regex)
