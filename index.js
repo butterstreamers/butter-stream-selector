@@ -9,7 +9,7 @@ function loadFromNPM (name) {
 
 function loadFromPackageJSON (regex) {
   var npm = loadPackageJSON()
-  if (! npm) return []
+  if (!npm) return []
 
   var packages = Object.keys(npm.dependencies).filter(function (p) {
     return p.match(regex)
@@ -69,7 +69,6 @@ function pickStreamer (url, passedArgs) {
           return spawnStreamer(Streamer, url, args)
         }
       }
-
     }
 
     fails.push(config.type)
